@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 
 const CorretorRedacao = () => {
@@ -9,6 +9,9 @@ const CorretorRedacao = () => {
   const [avaliacao, setAvaliacao] = useState(null);
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState('');
+
+  // Referência para scroll até a redação
+  const redacaoRef = useRef(null);
 
   const temasEnem = [
     'Democratização do acesso ao cinema no Brasil',
@@ -22,6 +25,14 @@ const CorretorRedacao = () => {
     'Publicidade infantil em questão no Brasil',
     'Os desafios da educação no Brasil'
   ];
+
+  // Função para rolar até a redação
+  const scrollToRedacao = () => {
+    redacaoRef.current?.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -198,10 +209,69 @@ const CorretorRedacao = () => {
         </div>
       ) : (
         <div>
+          {/* Área dos botões */}
           <div className="text-center mb-4">
-            <button onClick={resetForm} className="btn btn-secondary">
-              ← Nova Correção
-            </button>
+            <div style={{ 
+              display: 'flex', 
+              gap: '15px', 
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexWrap: 'wrap'
+            }}>
+              {/* Botão Nova Correção */}
+              <button 
+                onClick={resetForm} 
+                style={{
+                  background: 'linear-gradient(45deg, #6c757d, #495057)',
+                  border: 'none',
+                  padding: '12px 30px',
+                  fontSize: '1.1rem',
+                  borderRadius: '25px',
+                  boxShadow: '0 4px 15px rgba(108, 117, 125, 0.3)',
+                  transition: 'all 0.3s ease',
+                  color: 'white',
+                  fontWeight: '500',
+                  cursor: 'pointer'
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 6px 20px rgba(108, 117, 125, 0.4)';
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = '0 4px 15px rgba(108, 117, 125, 0.3)';
+                }}
+              >
+                ← Nova Correção
+              </button>
+
+              {/* Botão Rever Redação */}
+              <button 
+                onClick={scrollToRedacao} 
+                style={{
+                  background: 'linear-gradient(45deg, #007bff, #0056b3)',
+                  border: 'none',
+                  padding: '12px 30px',
+                  fontSize: '1.1rem',
+                  borderRadius: '25px',
+                  boxShadow: '0 4px 15px rgba(0, 123, 255, 0.3)',
+                  transition: 'all 0.3s ease',
+                  color: 'white',
+                  fontWeight: '500',
+                  cursor: 'pointer'
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 6px 20px rgba(0, 123, 255, 0.4)';
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = '0 4px 15px rgba(0, 123, 255, 0.3)';
+                }}
+              >
+                📄 Rever Redação
+              </button>
+            </div>
           </div>
           
           <div className="card mb-4">
@@ -254,6 +324,96 @@ const CorretorRedacao = () => {
           )}
         </div>
       )}
+
+      {/* Seção da redação original - ESPAÇAMENTO AUMENTADO ENTRE AS SEÇÕES */}
+      {avaliacao && (
+        <div ref={redacaoRef} className="card" style={{
+          marginTop: '4rem',              // AUMENTADO: de mt-5 para 4rem para mais espaço
+          background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
+          border: '2px solid #007bff',
+          borderRadius: '15px',
+          padding: '2rem'
+        }}>
+          <h3 className="mb-4" style={{ 
+            color: '#212529',              // Título em preto
+            borderBottom: '2px solid #007bff',
+            paddingBottom: '15px',
+            marginBottom: '30px'
+          }}>
+            📝 Sua Redação Original
+          </h3>
+          
+          <div style={{
+            background: 'white',
+            padding: '2rem',
+            borderRadius: '10px',
+            border: '1px solid #dee2e6',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+          }}>
+            <div className="mb-4" style={{ marginBottom: '2rem' }}>
+              <strong style={{ 
+                color: '#6c757d',
+                fontSize: '1.1rem',
+                display: 'block',
+                marginBottom: '12px'
+              }}>
+                Tema:
+              </strong>
+              <p style={{ 
+                margin: '0', 
+                fontStyle: 'italic', 
+                color: '#495057',
+                fontSize: '1.1rem',
+                padding: '15px 20px',
+                background: '#f8f9fa',
+                borderRadius: '8px',
+                borderLeft: '4px solid #007bff'
+              }}>
+                {usarTemaPersonalizado ? temaPersonalizado : tema}
+              </p>
+            </div>
+            
+            <div style={{ marginTop: '3rem' }}>
+              <strong style={{ 
+                color: '#6c757d',
+                fontSize: '1.1rem',
+                display: 'block',
+                marginBottom: '20px'
+              }}>
+                Texto:
+              </strong>
+              <div style={{ 
+                marginTop: '0',
+                whiteSpace: 'pre-wrap',
+                lineHeight: '2',
+                fontSize: '1.05rem',
+                color: '#212529',
+                textAlign: 'justify',
+                padding: '25px',
+                background: '#fdfdfd',
+                border: '1px solid #e9ecef',
+                borderRadius: '8px',
+                minHeight: '200px'
+              }}>
+                {redacao}
+              </div>
+            </div>
+            
+            <div className="mt-4 text-end" style={{ 
+              marginTop: '2rem',
+              paddingTop: '20px',
+              borderTop: '1px solid #e9ecef'
+            }}>
+              <small style={{ 
+                color: '#6c757d',
+                fontSize: '0.9rem'
+              }}>
+                Total de caracteres: {redacao.length}
+              </small>
+            </div>
+          </div>
+        </div>
+      )}
       
       <div className="card mt-4">
         <h4 className="mb-3">Como funciona a correção?</h4>
@@ -285,4 +445,3 @@ const CorretorRedacao = () => {
 };
 
 export default CorretorRedacao;
-
