@@ -113,19 +113,24 @@ Responda APENAS no formato JSON:
   "nivel_gravidade": 0-10
 }`;
 
-    const response = await axios.post('https://openrouter.ai/api/v1/chat/completions', {
-      model: 'qwen/qwen3-coder:free',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.3, // Baixa temperatura para análise mais precisa
-      max_tokens: 800
-    }, {
-      headers: {
-        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': 'http://localhost:3000',
-        'X-Title': 'ENEM Pro+'
-      }
-    });
+    const response = await axios.post(
+  "https://api.perplexity.ai/chat/completions",
+  {
+    model: "sonar-pro",
+    messages: [{ role: "user", content: prompt }],
+    temperature: 0.3,
+    max_tokens: 800,
+    // parâmetros extras opcionais da Perplexity:
+    // search_mode: "web", // ou "academic"
+    // return_related_questions: false,
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${process.env.PERPLEXITY_API_KEY}`, // ou OPENAI_API_KEY se preferir
+      "Content-Type": "application/json",
+    },
+  }
+);
 
     const avaliacaoTexto = response.data.choices[0].message.content;
     
@@ -740,19 +745,25 @@ Forneça a resposta no seguinte formato JSON:
   "comentario_geral": "Comentário geral sobre a redação"
 }`;
 
-    const response = await axios.post('https://openrouter.ai/api/v1/chat/completions', {
-      model: 'qwen/qwen3-coder:free',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.7,
-      max_tokens: 2000
-    }, {
-      headers: {
-        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': 'http://localhost:3000',
-        'X-Title': 'ENEM Pro+'
-      }
-    });
+    const response = await axios.post(
+  "https://api.perplexity.ai/chat/completions",
+  {
+    model: "sonar-pro",                 // ex.: sonar, sonar-pro, sonar-reasoning-pro
+    messages: [{ role: "user", content: prompt }],
+    temperature: 0.7,
+    max_tokens: 2000,
+    // Exemplos de extras específicos da Perplexity:
+    // search_mode: "web",               // ou "academic"
+    // search_recency_filter: "month",   // ou "day" | "week" | "year"
+    // return_related_questions: false,
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${process.env.PERPLEXITY_API_KEY}`, // use a chave pplx- da Perplexity
+      "Content-Type": "application/json",
+    },
+  }
+);
     
     const avaliacaoTexto = response.data.choices[0].message.content;
     
